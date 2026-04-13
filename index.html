@@ -19,6 +19,16 @@
 <meta property="og:site_name" content="Tá Limpo! Lavanderia Express">
 <meta name="twitter:card" content="summary_large_image">
 
+<!-- Google Analytics 4 / Google Ads -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-WPXV25EYV2"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-WPXV25EYV2');
+  gtag('config', 'AW-17784691297');
+</script>
+
 <link rel="icon" type="image/svg+xml" href="assets/img/logo_favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -46,15 +56,24 @@
 
 <!-- NAV -->
 <nav>
+  <button class="nav-toggle" aria-label="Abrir menu" aria-expanded="false" aria-controls="nav-drawer">
+    <span></span>
+    <span></span>
+    <span></span>
+  </button>
   <a href="#top" class="nav-logo"><img src="assets/img/logo_empe.svg" alt="Tá Limpo! Lavanderia Express"></a>
-  <ul class="nav-links">
-    <li><a href="#como">Como Funciona</a></li>
+</nav>
+<aside class="nav-drawer" id="nav-drawer" aria-hidden="true">
+  <button class="nav-close" aria-label="Fechar menu">&times;</button>
+  <ul class="nav-drawer-links">
+    <li><a href="#como">Como funciona</a></li>
     <li><a href="#valores">Diferenciais</a></li>
     <li><a href="#galeria">Galeria</a></li>
     <li><a href="#local">Localização</a></li>
     <li><a href="https://wa.me/5511963010465" class="pill-wpp">WhatsApp</a></li>
   </ul>
-</nav>
+</aside>
+<div class="nav-backdrop" aria-hidden="true"></div>
 
 <!-- HERO -->
 <header id="hero" id="top">
