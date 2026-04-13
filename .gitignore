@@ -8,3 +8,5 @@ dist/
 .vscode/
 .idea/
 .claude/
+assets/video/
+*.mov

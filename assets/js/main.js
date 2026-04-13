@@ -9,6 +9,34 @@ document.querySelectorAll('a[href^="#"]').forEach(link => {
   });
 });
 
+const navToggle = document.querySelector('.nav-toggle');
+const navDrawer = document.querySelector('.nav-drawer');
+const navClose = document.querySelector('.nav-close');
+const navBackdrop = document.querySelector('.nav-backdrop');
+
+const openNavDrawer = () => {
+  navDrawer.classList.add('open');
+  navBackdrop.classList.add('active');
+  navToggle.setAttribute('aria-expanded', 'true');
+  navDrawer.setAttribute('aria-hidden', 'false');
+};
+
+const closeNavDrawer = () => {
+  navDrawer.classList.remove('open');
+  navBackdrop.classList.remove('active');
+  navToggle.setAttribute('aria-expanded', 'false');
+  navDrawer.setAttribute('aria-hidden', 'true');
+};
+
+if (navToggle && navDrawer && navClose && navBackdrop) {
+  navToggle.addEventListener('click', openNavDrawer);
+  navClose.addEventListener('click', closeNavDrawer);
+  navBackdrop.addEventListener('click', closeNavDrawer);
+  document.querySelectorAll('.nav-drawer-links a').forEach(link => {
+    link.addEventListener('click', closeNavDrawer);
+  });
+}
+
 const io = new IntersectionObserver((entries) => {
   entries.forEach(entry => {
     if (entry.isIntersecting) {

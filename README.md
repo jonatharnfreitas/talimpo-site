@@ -56,4 +56,4 @@ Site 100% estático. Funciona em:
 - Meta tags Open Graph e Twitter Card configuradas.
 - Schema.org `LaundryOrDryCleaner` com endereço, telefone e horário.
 - `robots.txt` + `sitemap.xml`.
-- Ao publicar, atualizar o domínio real em `index.html`, `sitemap.xml` e `robots.txt` (hoje aponta para `talimpo.com.br`).
+- Domínio oficial: `talimpolavanderia.com` (configurado em `index.html`, `sitemap.xml` e `robots.txt`).
