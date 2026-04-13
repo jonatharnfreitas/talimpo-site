@@ -11,29 +11,28 @@ document.querySelectorAll('a[href^="#"]').forEach(link => {
 
 const navToggle = document.querySelector('.nav-toggle');
 const navDrawer = document.querySelector('.nav-drawer');
-const navClose = document.querySelector('.nav-close');
 const navBackdrop = document.querySelector('.nav-backdrop');
 
-const openNavDrawer = () => {
-  navDrawer.classList.add('open');
-  navBackdrop.classList.add('active');
-  navToggle.setAttribute('aria-expanded', 'true');
-  navDrawer.setAttribute('aria-hidden', 'false');
+const setNav = (open) => {
+  if (!navToggle || !navDrawer || !navBackdrop) return;
+  navDrawer.classList.toggle('open', open);
+  navBackdrop.classList.toggle('active', open);
+  navToggle.setAttribute('aria-expanded', String(open));
+  navDrawer.setAttribute('aria-hidden', String(!open));
+  document.body.classList.toggle('nav-open', open);
 };
 
-const closeNavDrawer = () => {
-  navDrawer.classList.remove('open');
-  navBackdrop.classList.remove('active');
-  navToggle.setAttribute('aria-expanded', 'false');
-  navDrawer.setAttribute('aria-hidden', 'true');
-};
-
-if (navToggle && navDrawer && navClose && navBackdrop) {
-  navToggle.addEventListener('click', openNavDrawer);
-  navClose.addEventListener('click', closeNavDrawer);
-  navBackdrop.addEventListener('click', closeNavDrawer);
+if (navToggle && navDrawer && navBackdrop) {
+  navToggle.addEventListener('click', () => {
+    const isOpen = navToggle.getAttribute('aria-expanded') === 'true';
+    setNav(!isOpen);
+  });
+  navBackdrop.addEventListener('click', () => setNav(false));
   document.querySelectorAll('.nav-drawer-links a').forEach(link => {
-    link.addEventListener('click', closeNavDrawer);
+    link.addEventListener('click', () => setNav(false));
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') setNav(false);
   });
 }
 
