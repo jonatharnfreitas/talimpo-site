@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://talimpo.com.br/sitemap.xml
