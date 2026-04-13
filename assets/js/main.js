@@ -9,12 +9,13 @@ document.querySelectorAll('a[href^="#"]').forEach(link => {
   });
 });
 
-const observer = new IntersectionObserver(entries => {
+const io = new IntersectionObserver((entries) => {
   entries.forEach(entry => {
     if (entry.isIntersecting) {
-      entry.target.style.animationPlayState = 'running';
+      entry.target.classList.add('on');
+      io.unobserve(entry.target);
     }
   });
-}, { threshold: 0.1 });
+}, { threshold: 0.12, rootMargin: '0px 0px -60px 0px' });
 
-document.querySelectorAll('.au').forEach(el => observer.observe(el));
+document.querySelectorAll('.reveal').forEach(el => io.observe(el));
