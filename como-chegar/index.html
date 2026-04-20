@@ -114,7 +114,10 @@
     display:flex;align-items:center;justify-content:space-between;gap:1rem;
   }
   .topbar a.brand{display:flex;align-items:center;gap:.6rem;font-weight:900;color:var(--blue-bg);font-family:'Nunito',sans-serif}
-  .topbar a.brand img{width:36px;height:36px}
+  .topbar a.brand img{height:56px;width:auto;display:block}
+  @media (max-width:480px){
+    .topbar a.brand img{height:44px}
+  }
   .topbar .back{
     font-weight:700;color:var(--blue);font-size:.95rem;
     padding:.5rem .9rem;border-radius:999px;
@@ -275,8 +278,7 @@
 <header class="topbar">
   <div class="topbar-inner">
     <a href="/" class="brand" aria-label="Tá Limpo! Lavanderia — Página inicial">
-      <img src="/assets/img/logo_favicon.svg" alt="" width="36" height="36">
-      <span>Tá Limpo!</span>
+      <img src="/assets/img/logo_empe.svg" alt="Tá Limpo! Lavanderia Express" width="180" height="56" fetchpriority="high">
     </a>
     <a href="/" class="back">← Voltar ao site</a>
   </div>
