@@ -467,12 +467,7 @@ section{padding:6rem 0;position:relative}
   font-weight:700;font-size:0.88rem;letter-spacing:0.04em;text-transform:uppercase;
 }
 .gal-placeholder svg{width:48px;height:48px;margin:0 auto 0.8rem;opacity:0.85}
-.gal-item:nth-child(2){background:linear-gradient(135deg,var(--pink),var(--pink-light))}
-.gal-item:nth-child(3){background:linear-gradient(135deg,var(--yellow),#FFD772);color:var(--blue-bg)}
-.gal-item:nth-child(3) .gal-placeholder{color:var(--blue-bg)}
-.gal-item:nth-child(4){background:linear-gradient(135deg,var(--blue-bg),var(--blue))}
-.gal-item:nth-child(5){background:linear-gradient(135deg,var(--blue-logo),var(--blue-light))}
-.gal-item:nth-child(6){background:linear-gradient(135deg,var(--pink-light),var(--pink))}
+.gal-item{background:var(--cream)}
 
 /* ── REDES SOCIAIS ── */
 #redes{background:var(--cream)}
