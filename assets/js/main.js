@@ -73,8 +73,7 @@ if (machinesPanel) {
   const renderError = () => {
     machinesPanel.innerHTML = `
       <div class="machines-error">
-        Não conseguimos carregar agora. Tente novamente em instantes ou
-        <a href="https://app.sislav.com.br/track-machines?trackcode=7aFtdEUMYa" target="_blank" rel="noopener">veja no Sislav ↗</a>.
+        Não conseguimos carregar agora. Tente novamente em instantes.
       </div>`;
     machinesPanel.setAttribute('aria-busy', 'false');
   };
