@@ -302,20 +302,21 @@
 <section id="avail" aria-label="Disponibilidade de máquinas">
   <div class="wrap">
     <div class="avail-head reveal">
-      <h2>Tem máquina disponível agora?</h2>
+      <h2>Status das máquinas <span class="live-pill"><span class="live-dot"></span> ao vivo</span></h2>
       <p>Consulte em tempo real antes de sair de casa. Sem fila, sem espera.</p>
     </div>
-    <div class="avail-frame reveal">
-      <iframe
-        title="Disponibilidade das máquinas Tá Limpo Lavanderia em tempo real"
-        src="https://app.sislav.com.br/track-machines?trackcode=7aFtdEUMYa"
-        loading="lazy"
-        referrerpolicy="no-referrer-when-downgrade"
-        allow="fullscreen"></iframe>
+
+    <div class="machines-panel reveal" id="machines-panel" aria-live="polite" aria-busy="true">
+      <div class="machines-loading">
+        <span class="spinner" aria-hidden="true"></span>
+        Carregando status das máquinas…
+      </div>
     </div>
+
     <p class="avail-foot reveal">
-      Tendo dificuldade pra visualizar?
-      <a href="https://app.sislav.com.br/track-machines?trackcode=7aFtdEUMYa" target="_blank" rel="noopener">Abrir em nova aba ↗</a>
+      <span id="machines-updated">Aguardando dados…</span>
+      &nbsp;·&nbsp;
+      <a href="https://app.sislav.com.br/track-machines?trackcode=7aFtdEUMYa" target="_blank" rel="noopener">Ver no Sislav ↗</a>
     </p>
   </div>
 </section>

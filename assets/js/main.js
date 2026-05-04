@@ -46,3 +46,97 @@ const io = new IntersectionObserver((entries) => {
 }, { threshold: 0.12, rootMargin: '0px 0px -60px 0px' });
 
 document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+// ── Status das máquinas (Sislav via app.talimpolavanderia.com/api/machines) ──
+const machinesPanel = document.getElementById('machines-panel');
+const machinesUpdated = document.getElementById('machines-updated');
+
+if (machinesPanel) {
+  const API = 'https://app.talimpolavanderia.com/api/machines';
+  const POLL_MS = 30000;
+  let lastFetchAt = 0;
+  let timeTickInterval = null;
+
+  const ICONS = {
+    WASHER: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="18" rx="2"/><circle cx="12" cy="13" r="5"/><circle cx="8" cy="6" r=".7" fill="currentColor"/><circle cx="11" cy="6" r=".7" fill="currentColor"/></svg>',
+    DRYER:  '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="18" rx="2"/><circle cx="12" cy="13" r="5"/><path d="M10 11.5c.7.5 1.3.5 2 0s1.3-.5 2 0"/></svg>',
+  };
+
+  const formatRelative = (timestamp) => {
+    const sec = Math.max(0, Math.round((Date.now() - timestamp) / 1000));
+    if (sec < 5) return 'Atualizado agora';
+    if (sec < 60) return `Atualizado há ${sec}s`;
+    const min = Math.floor(sec / 60);
+    return `Atualizado há ${min} min`;
+  };
+
+  const renderError = () => {
+    machinesPanel.innerHTML = `
+      <div class="machines-error">
+        Não conseguimos carregar agora. Tente novamente em instantes ou
+        <a href="https://app.sislav.com.br/track-machines?trackcode=7aFtdEUMYa" target="_blank" rel="noopener">veja no Sislav ↗</a>.
+      </div>`;
+    machinesPanel.setAttribute('aria-busy', 'false');
+  };
+
+  const renderMachines = (data) => {
+    if (!Array.isArray(data) || data.length === 0) { renderError(); return; }
+
+    const washers = data.filter(m => m.type === 'WASHER');
+    const dryers  = data.filter(m => m.type === 'DRYER');
+    const total   = data.length;
+    const free    = data.filter(m => m.status === 'AVAILABLE').length;
+
+    const card = (m) => {
+      const free = m.status === 'AVAILABLE';
+      return `
+        <div class="m-card ${free ? 'is-free' : 'is-busy'}">
+          <div class="m-num">${m.name}</div>
+          <div class="m-status"><span class="m-dot"></span>${free ? 'Livre' : 'Em uso'}</div>
+        </div>`;
+    };
+
+    const col = (title, icon, list) => `
+      <div class="machines-col">
+        <h3>${icon} ${title}</h3>
+        <div class="machines-list">${list.map(card).join('')}</div>
+      </div>`;
+
+    machinesPanel.innerHTML = `
+      <div class="machines-grid">
+        ${col('Lavadoras', ICONS.WASHER, washers)}
+        ${col('Secadoras', ICONS.DRYER, dryers)}
+      </div>
+      <div class="m-summary">
+        <span><strong>${free}</strong> livres</span>
+        <span><strong>${total - free}</strong> em uso</span>
+        <span>Total: <strong>${total}</strong></span>
+      </div>`;
+    machinesPanel.setAttribute('aria-busy', 'false');
+  };
+
+  const updateRelativeTime = () => {
+    if (lastFetchAt && machinesUpdated) machinesUpdated.textContent = formatRelative(lastFetchAt);
+  };
+
+  const fetchMachines = async () => {
+    try {
+      const res = await fetch(API, { cache: 'no-store' });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const data = await res.json();
+      lastFetchAt = Date.now();
+      renderMachines(data);
+      updateRelativeTime();
+    } catch {
+      if (!lastFetchAt) renderError();
+    }
+  };
+
+  fetchMachines();
+  setInterval(fetchMachines, POLL_MS);
+  timeTickInterval = setInterval(updateRelativeTime, 1000);
+
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'visible') fetchMachines();
+  });
+}
