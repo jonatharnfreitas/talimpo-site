@@ -78,20 +78,40 @@ if (machinesPanel) {
     machinesPanel.setAttribute('aria-busy', 'false');
   };
 
-  const renderMachines = (data) => {
-    if (!Array.isArray(data) || data.length === 0) { renderError(); return; }
+  const cycleProgress = (m) => {
+    const start = Date.parse(m.startDate);
+    const end = Date.parse(m.endDate);
+    if (!Number.isFinite(start) || !Number.isFinite(end) || end <= start) return null;
+    const now = Date.now();
+    const pct = Math.min(100, Math.max(0, ((now - start) / (end - start)) * 100));
+    const minLeft = Math.ceil((end - now) / 60000);
+    const label = minLeft <= 0 ? 'Finalizando…' : (minLeft === 1 ? 'Falta ~1 min' : `Faltam ~${minLeft} min`);
+    return { pct, label };
+  };
 
-    const washers = data.filter(m => m.type === 'WASHER');
-    const dryers  = data.filter(m => m.type === 'DRYER');
-    const total   = data.length;
-    const free    = data.filter(m => m.status === 'AVAILABLE').length;
+  const renderMachines = (data) => {
+    const machines = Array.isArray(data) ? data
+      : (data && Array.isArray(data.machines)) ? data.machines
+      : null;
+    if (!machines || machines.length === 0) { renderError(); return; }
+
+    const washers = machines.filter(m => m.type === 'WASHER');
+    const dryers  = machines.filter(m => m.type === 'DRYER');
+    const total   = machines.length;
+    const free    = machines.filter(m => m.status === 'AVAILABLE').length;
 
     const card = (m) => {
       const free = m.status === 'AVAILABLE';
+      const prog = free ? null : cycleProgress(m);
+      const progHtml = prog ? `
+          <div class="m-progress" data-start="${m.startDate}" data-end="${m.endDate}">
+            <div class="m-progress-track"><div class="m-progress-bar" style="width:${prog.pct.toFixed(1)}%"></div></div>
+            <div class="m-remaining">${prog.label}</div>
+          </div>` : '';
       return `
         <div class="m-card ${free ? 'is-free' : 'is-busy'}">
           <div class="m-num">${m.name}</div>
-          <div class="m-status"><span class="m-dot"></span>${free ? 'Livre' : 'Em uso'}</div>
+          <div class="m-status"><span class="m-dot"></span>${free ? 'Livre' : 'Em uso'}</div>${progHtml}
         </div>`;
     };
 
@@ -118,6 +138,17 @@ if (machinesPanel) {
     if (lastFetchAt && machinesUpdated) machinesUpdated.textContent = formatRelative(lastFetchAt);
   };
 
+  const updateProgressBars = () => {
+    machinesPanel.querySelectorAll('.m-progress').forEach(el => {
+      const prog = cycleProgress({ startDate: el.dataset.start, endDate: el.dataset.end });
+      if (!prog) return;
+      const bar = el.querySelector('.m-progress-bar');
+      const remaining = el.querySelector('.m-remaining');
+      if (bar) bar.style.width = `${prog.pct.toFixed(1)}%`;
+      if (remaining) remaining.textContent = prog.label;
+    });
+  };
+
   const fetchMachines = async () => {
     try {
       const res = await fetch(API, { cache: 'no-store' });
@@ -133,7 +164,7 @@ if (machinesPanel) {
 
   fetchMachines();
   setInterval(fetchMachines, POLL_MS);
-  timeTickInterval = setInterval(updateRelativeTime, 1000);
+  timeTickInterval = setInterval(() => { updateRelativeTime(); updateProgressBars(); }, 1000);
 
   document.addEventListener('visibilitychange', () => {
     if (document.visibilityState === 'visible') fetchMachines();

@@ -376,6 +376,20 @@ section{padding:6rem 0;position:relative}
 .m-card.is-busy .m-status{color:#C4225A}
 .m-card.is-busy .m-dot{background:var(--pink);animation:pulse 1.6s ease-in-out infinite}
 
+.m-progress{margin-top:0.55rem}
+.m-progress-track{
+  height:6px;border-radius:99px;background:rgba(196,34,90,0.18);
+  overflow:hidden;
+}
+.m-progress-bar{
+  height:100%;border-radius:99px;background:var(--pink);
+  transition:width 1s linear;
+}
+.m-remaining{
+  margin-top:0.35rem;font-size:0.68rem;font-weight:800;
+  color:#C4225A;letter-spacing:0.02em;
+}
+
 .m-summary{
   display:flex;justify-content:center;gap:1.2rem;flex-wrap:wrap;
   padding:1rem 0 0;margin-top:1.2rem;border-top:1px dashed rgba(2,50,160,0.18);
